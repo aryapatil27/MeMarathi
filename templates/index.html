@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MeMarathi AI - Marathi News Classification</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Modular CSS Stack -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+    <div class="animated-bg"></div>
+
+    <div class="app-container">
+        
+        <!-- Header / Navigation -->
+        <header class="app-header">
+            <div class="brand">
+                <div class="logo-wrapper">
+                    <img src="/static/images/logo.svg" alt="MeMarathi AI Logo" class="brand-logo" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'%232563EB\'><path d=\'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5\'/></svg>'">
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name">MeMarathi </span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <span class="badge badge-glow">
+                    <span class="pulse-dot"></span> NLP Powered
+                </span>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1 class="hero-title">MeMarathi</h1>
+                <p class="hero-subtitle">Marathi News Classification using Natural Language Processing</p>
+                <p class="hero-description">
+                    Analyze, categorize, and organize Marathi news articles instantly using advanced machine learning models trained on standardized news datasets.
+                </p>
+            </div>
+        </section>
+
+        <!-- Main Workspace -->
+        <main class="main-content">
+            
+            <!-- Predictor Card -->
+            <div class="card glass-card predictor-card">
+                <div class="card-header">
+                    <div class="header-title">
+                        <h2>Input Article</h2>
+                        <span class="subtitle-text">Enter or paste Marathi news text below</span>
+                    </div>
+                    <div class="char-counter" id="charCounter">0 characters</div>
+                </div>
+
+                <div class="input-container">
+                    <textarea 
+                        id="news" 
+                        placeholder="मराठी बातमी येथे लिहा..." 
+                        spellcheck="false"></textarea>
+                </div>
+
+                <div class="action-bar">
+                    <div class="left-actions">
+                        <button type="button" class="btn btn-secondary" id="sampleBtn">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                            Sample News
+                        </button>
+                    </div>
+                    <div class="right-actions">
+                        <button type="button" class="btn btn-outline" id="clearBtn">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                            Clear
+                        </button>
+                        <button type="button" class="btn btn-primary" id="predictBtn">
+                            <span>Predict Category</span>
+                            <kbd class="shortcut-hint">Ctrl + Enter</kbd>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loader State -->
+            <div class="card glass-card loader-card hidden" id="loaderCard">
+                <div class="spinner-wrapper">
+                    <div class="spinner"></div>
+                </div>
+                <p class="loader-text">Analyzing News...</p>
+                <p class="loader-subtext">Extracting TF-IDF features & evaluating classifier model</p>
+            </div>
+
+            <!-- Prediction Result Display -->
+            <div class="card glass-card result-card hidden" id="resultCard">
+                <div class="result-header">
+                    <span class="result-label">Predicted Category</span>
+                    <span class="confidence-badge">High Precision</span>
+                </div>
+                <div class="result-body">
+                    <div class="category-display" id="categoryDisplay">
+                        <span class="category-emoji" id="categoryEmoji">📰</span>
+                        <span class="category-name" id="category">----------</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Technical Architecture Grid -->
+            <div class="info-grid">
+                <div class="card glass-card info-card">
+                    <div class="info-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                    </div>
+                    <div class="info-content">
+                        <span class="info-title">Model</span>
+                        <span class="info-value">LinearSVC</span>
+                    </div>
+                </div>
+
+                <div class="card glass-card info-card">
+                    <div class="info-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>
+                    </div>
+                    <div class="info-content">
+                        <span class="info-title">Feature Extraction</span>
+                        <span class="info-value">TF-IDF</span>
+                    </div>
+                </div>
+
+                <div class="card glass-card info-card">
+                    <div class="info-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                    </div>
+                    <div class="info-content">
+                        <span class="info-title">Dataset</span>
+                        <span class="info-value">LDC Marathi News</span>
+                    </div>
+                </div>
+
+                <div class="card glass-card info-card">
+                    <div class="info-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    </div>
+                    <div class="info-content">
+                        <span class="info-title">Backend</span>
+                        <span class="info-value">FastAPI</span>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>Developed using <span class="tech-tag">FastAPI</span> <span class="tech-tag">Scikit-Learn</span> <span class="tech-tag">NLP</span></p>
+        </footer>
+
+    </div>
+
+    <!-- Modular JS Stack -->
+    <script src="/static/js/utils.js"></script>
+    <script src="/static/js/sample.js"></script>
+    <script src="/static/js/predict.js"></script>
+    <script src="/static/js/ui.js"></script>
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
