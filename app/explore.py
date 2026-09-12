@@ -1,7 +1,7 @@
 import pandas as pd
 
 # Load training dataset
-df = pd.read_csv("../dataset/LDC_Train.csv")
+df = pd.read_csv("../dataset/LDC.csv")
 print(df[df["Label"] == "Label"])
 print(df[df["Text"].isnull()].head())
 

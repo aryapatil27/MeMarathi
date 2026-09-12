@@ -1,9 +1,11 @@
 import re
 import joblib
+from pathlib import Path
 
-# Load saved model and vectorizer
-model = joblib.load("../models/news_classifier.pkl")
-vectorizer = joblib.load("../models/vectorizer.pkl")
+BASE_DIR = Path(__file__).resolve().parent
+
+model = joblib.load(BASE_DIR.parent / "models" / "news_classifier.pkl")
+vectorizer = joblib.load(BASE_DIR.parent / "models" / "vectorizer.pkl")
 
 
 # Marathi label mapping

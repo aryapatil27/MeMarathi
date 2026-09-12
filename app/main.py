@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -8,10 +10,13 @@ from predict import predict_news
 
 app = FastAPI()
 
+# Path to the project root
+BASE_DIR = Path(__file__).resolve().parent
+
 # Serve frontend files (CSS and JS)
 app.mount(
     "/static",
-    StaticFiles(directory="../static"),
+    StaticFiles(directory=BASE_DIR.parent / "static"),
     name="static"
 )
 
@@ -30,7 +35,7 @@ class News(BaseModel):
 # Serve the HTML page
 @app.get("/")
 def home():
-    return FileResponse("../templates/index.html")
+    return FileResponse(BASE_DIR.parent / "templates" / "index.html")
 
 # Prediction API
 @app.post("/predict")
