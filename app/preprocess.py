@@ -19,8 +19,13 @@ stopwords = {
 
 def clean_text(text):
     text = str(text)
+    # Remove numbers from the text
     text = re.sub(r"\d+", " ", text)
+    # Keep only Devanagari characters (Marathi) and whitespace
+# Other characters such as English letters, punctuation and special symbols are removed
     text = re.sub(r"[^\u0900-\u097F\s]", " ", text)
+    # Replace multiple spaces with a single space
+# strip() removes spaces from the beginning and end 
     text = re.sub(r"\s+", " ", text).strip()
 
     tokens = text.split()
