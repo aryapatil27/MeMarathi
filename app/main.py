@@ -8,17 +8,21 @@ from pydantic import BaseModel
 
 from predict import predict_news
 
+
 app = FastAPI()
 
+
 # Path to the project root
-BASE_DIR = Path(__file__).resolve().parent
+BASE_DIR = Path(__file__).resolve().parent.parent
+
 
 # Serve frontend files (CSS and JS)
 app.mount(
     "/static",
-    StaticFiles(directory=BASE_DIR.parent / "static"),
+    StaticFiles(directory=BASE_DIR / "static"),
     name="static"
 )
+
 
 # Allow frontend to access API
 app.add_middleware(
@@ -29,16 +33,24 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 class News(BaseModel):
     text: str
+
 
 # Serve the HTML page
 @app.get("/")
 def home():
-    return FileResponse(BASE_DIR.parent / "templates" / "index.html")
+    return FileResponse(
+        BASE_DIR / "templates" / "index.html"
+    )
+
 
 # Prediction API
 @app.post("/predict")
 def predict(data: News):
     category = predict_news(data.text)
-    return {"category": category}
+
+    return {
+        "category": category
+    }
