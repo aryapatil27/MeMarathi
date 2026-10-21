@@ -1,6 +1,6 @@
 import pandas as pd
 import re
-
+from marathi_stemmer import stem_word, lemmatize_word
 df = pd.read_csv("../dataset/LDC.csv")
 
 print("Original dataset:")
@@ -17,21 +17,31 @@ stopwords = {
     "या","ने","ला","ना","चा","ची","चे","वर","पासून","पर्यंत"
 }
 
-def clean_text(text):
-    text = str(text)
-    # Remove numbers from the text
+
+import re
+
+def clean_text(text, mode="lemma"):
+    if not isinstance(text, str):
+        text = str(text) if text is not None else ""
+
+    # Remove numbers and non-Devanagari characters
     text = re.sub(r"\d+", " ", text)
-    # Keep only Devanagari characters (Marathi) and whitespace
-# Other characters such as English letters, punctuation and special symbols are removed
     text = re.sub(r"[^\u0900-\u097F\s]", " ", text)
-    # Replace multiple spaces with a single space
-# strip() removes spaces from the beginning and end 
     text = re.sub(r"\s+", " ", text).strip()
 
-    tokens = text.split()
-    tokens = [word for word in tokens if word not in stopwords]
+    words = text.split()
 
-    return " ".join(tokens)
+    if mode == "lemma":
+        words = [lemmatize_word(word) for word in words]
+    elif mode == "stem":
+        words = [stem_word(word) for word in words]
+    elif mode != "none":
+        raise ValueError("mode must be 'lemma', 'stem', or 'none'")
+
+    words = [word for word in words if word not in stopwords]
+
+    return " ".join(words)
+
 
 df["Clean_Text"] = df["Text"].apply(clean_text)
 df = df[df["Clean_Text"].str.len() > 0]

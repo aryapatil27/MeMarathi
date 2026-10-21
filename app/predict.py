@@ -1,32 +1,31 @@
-import re
-import joblib
+
 from pathlib import Path
 
+import joblib
 
-# Path to project root
+try:
+    from .preprocess import clean_text
+except ImportError:
+    from preprocess import clean_text
+
+
+# ==================== LOAD MODEL ====================
+
 BASE_DIR = Path(__file__).resolve().parent
+PROJECT_DIR = BASE_DIR.parent
+MODEL_DIR = PROJECT_DIR / "models"
 
-
-# Load trained model and TF-IDF vectorizer
 model = joblib.load(
-    BASE_DIR.parent / "models" / "news_classifier.pkl"
+    MODEL_DIR / "news_classifier.pkl"
 )
 
 vectorizer = joblib.load(
-    BASE_DIR.parent / "models" / "vectorizer.pkl"
+    MODEL_DIR / "vectorizer.pkl"
 )
 
 
-# Marathi stopwords
-stopwords = {
-    "आहे", "आहेत", "होते", "होती", "होता", "आणि", "किंवा", "मध्ये",
-    "मधील", "यांच्या", "यांचा", "याचे", "यासाठी", "म्हणून", "परंतु",
-    "मात्र", "तर", "ही", "हे", "हा", "ते", "त्या", "तो", "ती", "एक",
-    "या", "ने", "ला", "ना", "चा", "ची", "चे", "वर", "पासून", "पर्यंत"
-}
+# ==================== LABEL MAPPING ====================
 
-
-# Marathi label mapping
 label_mapping = {
     "Sports": "क्रीडा",
     "Politics": "राजकारण",
@@ -43,53 +42,36 @@ label_mapping = {
 }
 
 
-def clean_text(text):
-    """
-    Preprocess Marathi news text.
-    This should match the preprocessing used during model training.
-    """
-
-    text = str(text)
-
-    # Remove numbers
-    text = re.sub(r"\d+", " ", text)
-
-    # Keep only Marathi characters and spaces
-    text = re.sub(r"[^\u0900-\u097F\s]", " ", text)
-
-    # Remove extra spaces
-    text = re.sub(r"\s+", " ", text).strip()
-
-    # Remove Marathi stopwords
-    tokens = text.split()
-    tokens = [word for word in tokens if word not in stopwords]
-
-    return " ".join(tokens)
-
+# ==================== PREDICTION ====================
 
 def predict_news(news):
-    """
-    Predict the category of Marathi news.
-    """
+    """Predict the category of Marathi news."""
 
-    # Preprocess input
-    news = clean_text(news)
+    if not isinstance(news, str) or not news.strip():
+        return "कृपया मराठी बातमी प्रविष्ट करा."
 
-    # Convert text into TF-IDF features
-    vector = vectorizer.transform([news])
+    # Use exactly the same preprocessing as training
+    cleaned_news = clean_text(news, mode="lemma")
 
-    # Predict category
+    if not cleaned_news:
+        return "प्रक्रियेनंतर बातमीमध्ये वैध मजकूर उरलेला नाही."
+
+    # Convert the cleaned text into TF-IDF features
+    vector = vectorizer.transform([cleaned_news])
+
+    # Predict the news category
     prediction = model.predict(vector)[0]
 
-    # Convert English label to Marathi label
+    # Return the Marathi category name
     return label_mapping.get(prediction, prediction)
 
 
-# Test prediction from terminal
+# ==================== TERMINAL TEST ====================
+
 if __name__ == "__main__":
 
-    news = input("मराठी बातमी लिहा : ")
+    news = input("मराठी बातमी लिहा: ")
 
     category = predict_news(news)
 
-    print("श्रेणी :", category)
+    print("श्रेणी:", category)
