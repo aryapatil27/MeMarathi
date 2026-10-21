@@ -1,4 +1,4 @@
-```python
+
 from pathlib import Path
 
 from app.predict import predict_news
@@ -40,4 +40,3 @@ def home():
 def predict(data: News):
     category = predict_news(data.text)
     return {"category": category}
-```
