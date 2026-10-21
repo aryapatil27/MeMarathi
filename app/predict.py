@@ -3,11 +3,7 @@ from pathlib import Path
 
 import joblib
 
-try:
-    from .preprocess import clean_text
-except ImportError:
-    from preprocess import clean_text
-
+from app.preprocess import clean_text
 
 # ==================== LOAD MODEL ====================
 
