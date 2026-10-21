@@ -3,7 +3,7 @@ from pathlib import Path
 
 import joblib
 
-from app.preprocess import clean_text
+from preprocess import clean_text
 
 # ==================== LOAD MODEL ====================
 
