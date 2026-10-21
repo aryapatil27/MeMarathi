@@ -1,6 +1,6 @@
 
 from pathlib import Path
-from preprocess import clean_text
+from app.preprocess import clean_text
 import joblib
 import pandas as pd
 
