@@ -1,6 +1,6 @@
 import pandas as pd
 import re
-from app.preprocess import clean_text
+
 from marathi_stemmer import stem_word, lemmatize_word
 df = pd.read_csv("../dataset/LDC.csv")
 
