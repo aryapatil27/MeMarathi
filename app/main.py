@@ -11,7 +11,6 @@ from pydantic import BaseModel
 APP_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(APP_DIR))
 
-from predict import predict_news
 
 app = FastAPI()
 
