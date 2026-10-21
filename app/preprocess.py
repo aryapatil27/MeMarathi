@@ -1,7 +1,7 @@
 import pandas as pd
 import re
 
-from marathi_stemmer import stem_word, lemmatize_word
+from app.marathi_stemmer import stem_word, lemmatize_word
 df = pd.read_csv("../dataset/LDC.csv")
 
 print("Original dataset:")
